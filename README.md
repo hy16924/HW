@@ -183,6 +183,13 @@
    echo "$@"
    ```
    
+   ##### slient mode와 verbose mode 비교표
+   
+   | |verbose mode(default)|slient mode|
+   |---|---|---|
+   |invaild 옵션 사용| opt값을 ?로 설정하고 OPTARG값은 X, 오류 메세지 출력|opt값을 ?로 설정하고 OPTARG 값은 해당 옵션으로 설정|
+   |옵션인수 값을 제공하지 않을 경우| opt값을 ?로 설정하고 OPTARG 값은 X, 오류 메세지 출력|opt값을 :로 설정하고 OPTARG 값은 해당 옵션 문자로 설정|
+   
    #### getopt
       * getopt 명령어는 getopts 명령어와 비슷하지만 명령어와 비슷한데 `/usr/bin/getopt/`에 위치한 외부 명령어이다.
       * getopt 명령어는 short옵션과 long 옵션을 모두 처리할 수 있다.
@@ -192,6 +199,7 @@
       이후에 입력된 옵션들을 실행해준다.    
       
       ###### 아래 파일 이름을 get.sh이라 하자
+      ###### eval set -- $option 에 대한 더 자세한 설명은 https://unix.stackexchange.com/questions/383862/bash-why-is-eval-and-shift-used-in-a-script-that-parses-command-line-arguments 참고
       ```sh       
       #!/bin/bash
       # h, help는 인자 없는 옵션, a, aaa, b, bbb는 인자를 필요로 하는 옵션들
