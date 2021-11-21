@@ -183,12 +183,45 @@
    echo "$@"
    ```
    
-   
-   
-   
    #### getopt
       * getopt 명령어는 getopts 명령어와 비슷하지만 명령어와 비슷한데 `/usr/bin/getopt/`에 위치한 외부 명령어이다.
       * getopt 명령어는 short옵션과 long 옵션을 모두 처리할 수 있다.
+      * getopts 옵션과 동일하게 인자를 가지는 옵션 뒤에는 ":"를 붙여준다.
       * short 옵션은 -o와 함께, long 옵션은 -l을 써준다.
+      * getops 명령어는 중간에 파일명이나 문자열이 오면 이후 옵션들은 인식을 못하는데 반해, getopt 옵션은 올바르게 구분하여 정리해주어서 중간에 파일명이나 문자열이 오더라도
+      이후에 입력된 옵션들을 실행해준다.    
       
+      ###### 아래 파일 이름을 get.sh이라 하자
+      
+        ```bash
+        #!/bin/bash
+        # h, help는 인자 없는 옵션, a, aaa, b, bbb는 인자를 필요로 하는 옵션들
+        
+        if ! options=$(getopt -o ab:h -l help,aaa:,bbb: -- "$@") # 지정되지 않은 옵션이 입력되면 메세지 출력
+        then 
+           echo "ERROR: print usage"
+        exit 1
+        fi
+
+        eval set -- $options # getopt에서 옵션 목록의 재실행 방지
+
+        while true; do
+        case "$1" in
+           -h|--help)
+             echo "You choose $1 option"
+              shift ;;
+           -a|--aaa)
+              echo "You choose $1 option, OPTARG = $2"
+              shift 2 ;;   # 옵션 인수를 가지므로 shift 2
+           -b|--bbb)
+              echo "You choose $1 option, OPTARG = $2"
+              shift 2 ;;
+            --)
+              shift
+              break
+           esac
+        done
+
+        echo "$@" 
+        ```
         
