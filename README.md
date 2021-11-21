@@ -10,9 +10,9 @@
       
         <img src="https://user-images.githubusercontent.com/66362763/142018133-e53ffbf6-6dba-49fa-b155-eafefb15edad.png" width="80%" height="40%"/>
        
-        `$ sed -n '3p' test`를 명령행에 입력하면 파일의 3번째 줄인 *For ever if I'm far away I hold you in my heart*만 출력이 되고
+        `$ sed -n '3p' test`를 명령행에 입력하면 파일의 3번째 줄인 *For ever if I'm far away I hold you in my heart*만 출력이 되고 *(print)*
         
-        `$ sed '3d' test`를 명령행에 입력하면 파일의 3번째 줄이 삭제되어 출력된다.
+        `$ sed '3d' test`를 명령행에 입력하면 파일의 3번째 줄이 삭제되어 출력된다. *(delete)*
         
         여기서 -n 옵션은 변경이 일어난 행만 출력하도록 한다.
         
@@ -27,11 +27,11 @@
         
         ![cat no change](https://user-images.githubusercontent.com/66362763/142558052-3c24ba49-b47f-41ea-98a7-320189549b95.png)
           
-        `$ sed 's/Remember me/Hello world!/' test`를 명령행에 입력하면 Remember me가 Hello world!로 바뀐 채로 출력된다.
+        `$ sed 's/Remember me/Hello world!/' test`를 명령행에 입력하면 Remember me가 Hello world!로 바뀐 채로 출력된다. *(substitute)*
         
         ![Remeber me change Hello World!](https://user-images.githubusercontent.com/66362763/142558345-82b4a4e6-9098-49f8-a741-115edc1329e2.png)
         
-        `$ sed '/me/w outfile' test`를 입력하면 test 파일에서 me가 들어간 행을 찾아 outfile에 저장한다.
+        `$ sed '/me/w outfile' test`를 입력하면 test 파일에서 me가 들어간 행을 찾아 outfile에 저장한다. *(write)*
         
         ![nano outfile](https://user-images.githubusercontent.com/66362763/142558476-e97ecb75-e339-4293-a583-4c2bf9680836.png)
         
@@ -39,8 +39,8 @@
 
     #### awk
      
-      * awd 명령어는 하나 이상의 공백으로 구분된 여러 열의 텍스트를 처리할 때 유용하게 사용된다.
-      * 사칙연산도 awd 명령어를 이용하여 할 수 있다.
+      * awk 명령어는 하나 이상의 공백으로 구분된 여러 열의 텍스트를 처리할 때 유용하게 사용된다.
+      * 사칙연산도 awk 명령어를 이용하여 할 수 있다.
       ###### 아래와 같은 새로운 matrix 파일을 만들었다고 하자
       ```
       1 2 3
@@ -58,11 +58,11 @@
       ```
       `awk '{sum+=$1}END{print sum}' matrix` 명령어를 실행하면 첫번째 열들을 더한 값인 12가 출력된다.
       
-      여기서 END를 입력하지 않으면 더해질때마다 출력이 되서 아래처럼 출력된다.
+      여기서 END를 입력하지 않으면 더해질 때마다 출력이 되서 아래처럼 출력된다.
       ```
-      1
-      5
-      12
+      1 # 1
+      5 # 1+4
+      12 # 1+4+7
       ```
       여기에 `{print sum}`을 `{print sum/NR}`로 바꿔주면 첫 번째 열의 평균값을 구할 수 있다.
       
@@ -112,7 +112,7 @@
        
        `awk '$2~/e/' matrix`는 두 번째 열에서 "e"로 시작하는 행을 출력한다. 
        
-       따라서 위 세개의 입력 모두 `d e f`가 출력된다.
+       따라서 위 세 개의 입력 모두 `d e f`가 출력된다.
       
       ---
       
@@ -121,7 +121,7 @@
    #### getopts
       * 쉘에서 명령을 사용할 때 함께 사용하는 옵션을 스크립트 파일이나 함수를 실행할 때에도 사용할 수 있다.
       * 스크립트 내에서 직접 옵션을 해석해서 사용해야 하는데, 그 때 사용하는 것이 바로 getopts 명령어다.
-      * 인자가 있는 실행옵션은 옵션 뒤에 ":"를 붙여주고, 인지가 필요 없는 옵션은 그냥 써주면 된다.
+      * 인자가 있는 실행 옵션은 옵션 뒤에 **":"** 를 붙여주고, 인자가 필요 없는 옵션은 그냥 써주면 된다.
       * 만약 옵션들을 붙여 쓸 경우(-bch), bch를 각각 하나의 옵션 `-b`, `-c`, `-h`으로 보기 때문에 getopts 명령어로 short옵션과 long 옵션을 동시에 처리하긴 어렵다.
 
       ###### 아래 파일 이름을 This.sh 이라 하자
@@ -231,7 +231,7 @@
 
       echo "$@" 
       ```
-      `./get.sh --help hello -b 123 -h opt --bbb='hello world!' --aaa='yes'`를 입력하면
+      `./get.sh --help hello -b 123 -h opt --bbb='hello world!' --aaa='yes'`를 입력하면 아래와 같이 출력이 된다.
       ```
       You choose --help option
       You choose -b option, OPTARG = 123  
@@ -240,7 +240,6 @@
       You choose --aaa option, OPTARG = yes  
       hello opt
       ```
-      위 처럼 출력이 된다.
       
       getopt 입력예시(`./get.sh --help hello -b 123 -h opt --bbb='hello world!' --aaa='yes'`)에서 hello나 opt는 옵션들 사이에 입력이 되어있지만
       
