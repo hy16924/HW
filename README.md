@@ -223,4 +223,26 @@
 
       echo "$@" 
       ```
-        
+      `./get.sh --help hello -b 123 -h opt --bbb='hello world!' --aaa='yes'`를 입력하면
+      ```
+      You choose --help option
+      You choose -b option, OPTARG = 123  
+      You choose -h option
+      You choose --bbb option, OPTARG = hello world!
+      You choose --aaa option, OPTARG = yes  
+      hello opt
+      ```
+      위 처럼 출력이 된다.
+      
+      getopt 입력예시(`./get.sh --help hello -b 123 -h opt --bbb='hello world!' --aaa='yes'`)에서 hello나 opt는 옵션들 사이에 입력이 되어있지만
+      
+      출력에서 뒤에 있는 --aaa나 --bbb도 잘 출력되는 것을 확인할 수 있다.
+      
+      그런데 만약  `./This.sh -a hello yes -bc`(getopts)처럼 뒤에 있는 옵션 -bc 앞에 뜬금없는 문자열이 나오면
+      ```
+      You choose option a, OPTARG = hello
+      yes -bc
+      ```
+      위처럼 문자열 뒤에 있는 옵션이 제대로 출력되지 않는다.
+      
+      이는 getopt 명령어는 옵션 인자에 해당하지 않는 파일이나 문자열을 뒤로 보내주기 때문이다.
