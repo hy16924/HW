@@ -121,10 +121,74 @@
    #### getopts
       * 쉘에서 명령을 사용할 때 함께 사용하는 옵션을 스크립트 파일이나 함수를 실행할 때에도 사용할 수 있다.
       * 스크립트 내에서 직접 옵션을 해석해서 사용해야 하는데, 그 때 사용하는 것이 바로 getopts 명령어다.
-      * getopts 명령어는 short 옵션을 처리한다. (-n, -al과 같이 '-' 하나와 사용하는 옵션)
+      * 인자가 있는 실행옵션은 옵션 뒤에 ":"를 붙여주고, 인지가 필요 없는 옵션은 그냥 써주면 된다.
+      * 만약 옵션들을 붙여 쓸 경우(-bch), bch를 각각 하나의 옵션 `-b`, `-c`, `-h`으로 보기 때문에 getopts 명령어로 short옵션과 long 옵션을 동시에 처리하긴 어렵다.
+
+      ###### 아래 파일 이름을 This.sh 이라 하자
+      
+      ```bash
+      #!/bin/bash
+
+      while getopts "a:bch" opt; do # a는 인자를 필요로 하고, bch는 인자가 필요X
+      case $opt in
+      a)
+        echo "You choose option a, OPTARG = $OPTARG" # -a 뒤에 입력된 인자는 $OPTARG에 저장된다.
+        ;;
+      b)
+        echo "You choose option b"
+        ;;
+      c)
+        echo "You choose option c"
+        ;;
+      h)
+        echo "You can choose option between a, b, c"
+        ;;
+     esac
+    done
+    shift $(( OPTIND - 1 )) # getopts에 의해 분석된 모든 옵션을 제거하고, 첫 번째로 전달된 비옵션 인수 참조
+    echo "$@"
+    ```
+    `./test.sh -a 123 -b -c hello'를 입력하면 
+    ```
+    You choose option a, OPTARG = 123
+    You choose option b
+    You choose option c 
+    hello
+    ```
+    만약 -a 옵션 뒤에 인자를 함께 입력해주지 않으면 `./This.sh: option requires an argument --a`라는 에러 메세지가 뜬다.
+    
+    이런 에러 메세지를 받고 싶지 않다면, silent mode를 이용하면 되는데, slient mode는 옵션 앞에 ":"를 붙여주면 된다.
+    
+    그러면 에러 메세지가 출력되지 않는다.
+    ```sh
+    #!/bin/bash
+    
+    while getopts ":a:bch" opt; do # a옵션 앞에 ":"추가
+    case $opt in
+      a)
+        echo "You choose option a, OPTARG = $OPTARG"
+        ;;
+      b)
+        echo "You choose option b"
+        ;;
+      c)
+        echo "You choose option c"
+        ;;
+      h)
+        echo "You can choose option between a, b, c"
+        ;;
+    esac
+   done
+   shift $(( OPTIND - 1 ))
+   echo "$@"
+   ```
+   
+   
+   
    
    #### getopt
       * getopt 명령어는 getopts 명령어와 비슷하지만 명령어와 비슷한데 `/usr/bin/getopt/`에 위치한 외부 명령어이다.
-      * getopt는 short 옵션, long 옵션 모두를 지원한다.
+      * getopt 명령어는 short옵션과 long 옵션을 모두 처리할 수 있다.
+      * short 옵션은 -o와 함께, long 옵션은 -l을 써준다.
       
         
