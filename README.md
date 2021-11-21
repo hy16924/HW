@@ -192,36 +192,35 @@
       이후에 입력된 옵션들을 실행해준다.    
       
       ###### 아래 파일 이름을 get.sh이라 하자
+      ```sh       
+      #!/bin/bash
+      # h, help는 인자 없는 옵션, a, aaa, b, bbb는 인자를 필요로 하는 옵션들
       
-        ```bash
-        #!/bin/bash
-        # h, help는 인자 없는 옵션, a, aaa, b, bbb는 인자를 필요로 하는 옵션들
-        
-        if ! options=$(getopt -o ab:h -l help,aaa:,bbb: -- "$@") # 지정되지 않은 옵션이 입력되면 메세지 출력
-        then 
-           echo "ERROR: print usage"
-        exit 1
-        fi
+      if ! options=$(getopt -o ab:h -l help,aaa:,bbb: -- "$@") # 지정되지 않은 옵션이 입력되면 메세지 출력
+      then 
+         echo "ERROR: print usage"
+      exit 1
+      fi
 
-        eval set -- $options # getopt에서 옵션 목록의 재실행 방지
+      eval set -- $options # getopt에서 옵션 목록의 재실행 방지
 
-        while true; do
-        case "$1" in
-           -h|--help)
-             echo "You choose $1 option"
-              shift ;;
-           -a|--aaa)
-              echo "You choose $1 option, OPTARG = $2"
-              shift 2 ;;   # 옵션 인수를 가지므로 shift 2
-           -b|--bbb)
-              echo "You choose $1 option, OPTARG = $2"
-              shift 2 ;;
-            --)
-              shift
-              break
-           esac
-        done
+      while true; do
+      case "$1" in
+         -h|--help)
+           echo "You choose $1 option"
+            shift ;;
+         -a|--aaa)
+            echo "You choose $1 option, OPTARG = $2"
+            shift 2 ;;   # 옵션 인수를 가지므로 shift 2
+         -b|--bbb)
+            echo "You choose $1 option, OPTARG = $2"
+            shift 2 ;;
+          --)
+            shift
+            break
+         esac
+      done
 
-        echo "$@" 
-        ```
+      echo "$@" 
+      ```
         
